@@ -1,6 +1,6 @@
 # challenge
 This is the repository to save my rock, paper, scissors challenge game.
-In this project I have used the Spring Framework, in particular, the Spring boot tool,
+In this project, I have used the Spring Framework, in particular, the Spring boot tool,
 which allow me to create faster the project and aggregate some important dependencies.
 All dependencies required are included in the project.
 It was used the template engine Thymeleaf to generate the templates that were used in 
