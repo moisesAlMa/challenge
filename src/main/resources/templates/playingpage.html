@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="stylesheet" href="/css/generalstyle.css"/>
+
+<script src="/js/jquery-3.6.0.min.js"></script>
+
+<script type="text/javascript">
+
+	var myTimeout;
+	var iteration = 0;
+	const option = {
+		1: "ROCK",
+		2: "PAPER",
+		3: "SCISSORS"
+	};
+	var optionPlayerTwo;
+	var rounds = 0;
+	var roundList = [];
+
+	$(document).ready(function() {
+		
+		$("#playroundagain").on("click", function() {
+			rounds++;
+			$(".playbutton").attr('disabled', 'true');
+			$("#resultSpace").html("");
+			$("#roundnumber").val(rounds);
+			playGame();
+		});
+		
+		$("#restartgame").on("click", function() {
+			rounds = 0;
+			$("#roundnumber").val(rounds);
+			$("#gameSpace").html("");
+			$("#resultSpace").html("");
+			$('#results tbody').html("");
+		});
+		
+		$("#resume").on("click", function() {
+			const data = JSON.stringify(roundList);
+			const url = "http://localhost:8080/gamerps/showdata";
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: data,
+				contentType: 'application/json'
+			})
+			.done(function (dataBack) {
+					document.open();
+					document.write(dataBack);
+					history.pushState(null, '', "http://localhost:8080/gamerps/showdata");
+					document.close();
+			});
+		});
+		
+		$('.inputField').on('input', function(){
+			var idInput = $(this).attr('id');
+			var idLabel = idInput + 'Label';
+			$('#' + idLabel).css('display', 'inline');
+			
+			if ($(this).val().length === 0) {
+				$('#' + idLabel).css('display', 'none');
+			}
+			
+		});
+	});
+	
+	function playGame() {
+		$("#gameSpace").html('<div class="countdownLetters">ROCK</div>');
+		myTimeout = setInterval(countdown, 1000);
+	}
+	
+	function countdown() {
+		iteration++;
+		switch (iteration) {
+			case 1:
+				$("#gameSpace").html('<div class="countdownLetters">PAPER</div>');
+				break;
+			case 2:
+				$("#gameSpace").html('<div class="countdownLetters">SCISSORS</div>');
+				break;
+			case 3:
+				clearInterval(myTimeout);
+				iteration = 0;
+				gameResult();
+				break;
+			default:
+				$("#gameSpace").html("");
+				break;
+		}
+	}
+	
+	function gameResult() {
+		var optionPlayerOne = option[1];
+		var optionNumber = randomOption();
+		optionPlayerTwo = option[optionNumber];
+		var finalResult = "";
+		switch (optionPlayerTwo) {
+			case "ROCK":
+				$("#gameSpace").html('<img src="/img/rock.png" height="140px" width="170px">' + '<img src="/img/versus.png" height="140px" width="170px">' + '<img src="/img/rock.png" height="140px" width="170px">');
+				$("#resultSpace").html('<div class="resulLetters">DRAW</div>');
+				finalResult = "DRAW";
+				break;
+			case "PAPER":
+				$("#gameSpace").html('<img src="/img/rock.png" height="140px" width="170px">' + '<img src="/img/versus.png" height="140px" width="170px">' + '<img src="/img/paper.png" height="140px" width="170px">');
+				$("#resultSpace").html('<div class="resulLetters">2nd PLAYER WINS</div>');
+				finalResult = "2nd PLAYER WINS";
+				break;
+			case "SCISSORS":
+				$("#gameSpace").html('<img src="/img/rock.png" height="140px" width="170px">' + '<img src="/img/versus.png" height="140px" width="170px">' + '<img src="/img/scissors.png" height="140px" width="170px">');
+				$("#resultSpace").html('<div class="resulLetters">1st PLAYER WINS</div>');
+				finalResult = "1st PLAYER WINS";
+				break;
+			default:
+				$("#resultSpace").html("");
+				$("#gameSpace").html("");
+				break;
+		}
+		$(".playbutton").removeAttr('disabled');
+		addResultTable(optionPlayerTwo, finalResult);
+	}
+	
+	function randomOption() {
+		return Math.floor(1 + Math.random() * 3);
+	}
+	
+	function addResultTable(optionPlayerTwo, finalResult) {
+		const fila = '<tr id="row_' + rounds + '">'
+			+ '<td id="player1_' + rounds + '"> ROCK </td>'
+			+ '<td id="player2_' + rounds + '">' + optionPlayerTwo + '</td>'
+			+ '<td id="result_' + rounds + '">' + finalResult + '</td>'
+			+ '</tr>';
+		$(fila).appendTo('#results tbody');
+		// Insert data
+		const round = {};
+		round.optionPlayer1 = "ROCK";
+		round.optionPlayer2 = optionPlayerTwo;
+		round.winner = finalResult;
+		round.roundNumber = rounds;
+		roundList.push(round);
+	}
+
+</script>
+</head>
+
+<body>
+	<div class="flex-container">
+		<div class="flex-container2" style="flex-grow: 3;">
+			<div class="flex-container" style="justify-content: space-between; margin: 1.8rem 2.6rem 1.8rem 2.6rem;">	
+				<button id="playroundagain" class="playbutton">PLAY ROUND</button>
+				<button id="restartgame" class="playbutton">RESTART GAME</button>
+				<button id="resume" class="playbutton">RESUME</button>	
+			</div>
+			<div style="position: relative; width: 10%; margin: 1.8rem 2.6rem 1.8rem 2.6rem;">
+				<label class="labelField" id="roundnumberLabel" style="display: inline; position: absolute;">ROUND</label>
+				<input class="inputField" id="roundnumber" type="number" readonly="readonly" value=0 style="height:45px; width:100%;">
+			</div>
+			<div id="gameSpace" class="flex-container" style="align-items: center; justify-content: center;">	
+			</div>
+			<div id="resultSpace" style="text-align:center; margin-top: 1.8rem;">
+			</div>
+		</div>
+		<div style="flex-grow: 1; margin: 1.8rem 2.6rem 0rem 2.6rem; height: 500px; overflow-y: auto;">
+			<table id="results" style="width: 100%;">
+				<caption class="tableTitle"> ROUNDS PLAYED</caption>
+				<thead>
+					<tr>
+						<th id="firstcolumn">1st PLAYER CHOICE</th>
+						<th id="secondcolumn">2nd PLAYER CHOICE</th>
+						<th id="thirdcolumn">ROUND RESULT</th>
+					</tr> 
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

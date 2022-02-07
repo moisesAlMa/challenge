@@ -1,0 +1,124 @@
+.introbutton {
+	font-family: Verdana,sans-serif;
+	font-size: 5rem;
+   	font-weight: bold;
+   	border-radius: 25px;
+   	border: 2px solid #73AD21;
+   	color: #73AD21;
+	background-color: #FFFFFF;
+ 		cursor: pointer;
+}
+
+.playbutton {
+	font-family: Verdana,sans-serif;
+	font-size: 1rem;
+   	font-weight: bold;
+   	border-radius: 10px;
+   	border: 2px solid #73AD21;
+   	color: #73AD21;
+	background-color: #FFFFFF;
+	height: 3rem;
+ 		cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.flex-container {
+	display: flex;
+	flex-direction: row;
+}
+
+.flex-container2 {
+	display: flex;
+	flex-direction: column;
+}
+
+@media (max-width: 1000px) {
+	.flex-container {
+	  flex-direction: column;
+	}
+}
+
+.inputField {
+	border: none !important;
+	outline: none;
+	border-bottom: 1px solid black !important;
+	background-color: #ffffff !important;
+	color: #121212;
+	padding-left: 0.35rem;
+	font-family: sans-serif;
+	font-size: 1rem;
+}
+
+.labelField {
+	line-height: 0.2rem;
+	font-family: sans-serif;
+	font-size: 0.75rem;
+	font-weight: 300;
+	color: #666666;
+	padding-left: 0.35rem;
+}
+
+.tableTitle {
+	margin-bottom: 1rem;
+	padding-left: 0.35rem;
+  	font-family: sans-serif;
+  	font-size: 1rem;
+  	font-weight: 500;
+  	line-height: 2rem;
+	color: #121212; 
+	text-align: left;
+}
+
+#results tr th {
+	color: #666666;
+	font-family: sans-serif;
+	font-size: 0.75rem !important;
+	font-weight: 300 !important;
+	line-height: 1rem;
+	padding: 0.5rem;
+	text-align: left;
+	border-bottom: 1px solid #ddd !important;
+	border-right: 0px;
+	border-left: 0px;
+	background-color: #ffffff;
+	white-space: nowrap;
+}
+
+#results tr td {
+	color: #121212;
+	font-family: sans-serif;
+	font-size: 0.75rem !important;
+	font-weight: 300 !important;
+	line-height: 1rem;
+	padding: 0.5rem;
+	text-align: left;
+	border-bottom: 1px solid #ddd !important;
+	border-right: 0px;
+	border-left: 0px;
+	background-color: #ffffff;
+}
+
+.resulLetters {
+  	font-family: georgia, garamond;
+  	font-size: 2rem;
+  	font-weight: 500;
+	color: #121212; 
+}
+
+.countdownLetters {
+	font-family: georgia, garamond;
+  	font-size: 3rem;
+  	font-weight: 500;
+	color: #121212;
+}
+
+.dataTitle {
+	font-family: georgia, garamond;
+  	font-size: 2rem;
+  	font-weight: 500;
+	color: #121212; 
+}
