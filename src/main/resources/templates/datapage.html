@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Data visualization</title>
 
 <link rel="stylesheet" href="/css/generalstyle.css"/>
 
@@ -10,6 +10,12 @@
 <script src="/js/jquery-3.6.0.min.js"></script>
 
 <script type="text/javascript" th:inline="javascript">
+
+	var dataLists = [];
+	var firstVicts = 0;
+	var secondsVicts = 0;
+	var drawsPlayed = 0;
+	var roundsPlayed = 0;
 
 	//Load the Visualization API and the corechart package.
 	google.charts.load('current', {'packages':['corechart']});
@@ -23,31 +29,35 @@
     // draws it.
     function drawChart() {
         // Create the data table.
+        var data1 = ["1st PLAYER TOTAL WINS",firstVicts];
+        var data2 = ["2nd PLAYER TOTAL WINS",secondsVicts];
+        var data3 = ["TOTAL DRAWS",drawsPlayed];
+        dataLists.push(data1, data2, data3);
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Result');
         data.addColumn('number', 'Number of results');
-        data.addRows([[${data}]]);
+        data.addRows(dataLists);
 
         // Set chart options
-        var options = {'title':'Total rounds played: ' + [[${rounds}]] + '',
-            'width':400,
-            'height':300};
+        var options = {'title':'Total rounds played: ' + roundsPlayed + '',
+            'width':350,
+            'height':200};
 
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         chart.draw(data, options);
         
-        var barchart_options = {title:'Total rounds played: ' + [[${rounds}]] + '',
-                width:400,
-                height:300,
+        var barchart_options = {title:'Total rounds played: ' + roundsPlayed + '',
+                width:350,
+                height:200,
                 legend: 'none'};
  		var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
  		barchart.draw(data, barchart_options);
  		
  		var colum_options = {
-			title: 'Total rounds played: ' + [[${rounds}]] + '',
-			width: 400,
-			height: 300,
+			title: 'Total rounds played: ' + roundsPlayed + '',
+			width: 350,
+			height: 200,
 			bar: {groupWidth: "95%"},
 			legend: { position: "none" },
 		};
@@ -55,22 +65,26 @@
 		colum_chart.draw(data, colum_options);
 		
 		var table_options = {
-			width: 400,
-			height: 300
+			width: 350,
+			height: 200
 		};
 		
 		var table = new google.visualization.Table(document.getElementById('table_div'));
         table.draw(data, table_options);
     }
 
-	$(document).ready(function() {
+	$(document).ready(function() {		
+        firstVicts = parseInt([[${firsts}]]);
+        secondsVicts = parseInt([[${seconds}]]);
+        drawsPlayed = parseInt([[${draws}]]);
+        roundsPlayed = parseInt([[${rounds}]]);       
 	});
 	
 </script>
 
 </head>
 <body>
-	<h2 class="dataTitle" style="margin: 1.8rem 2.6rem 1.8rem 2.6rem; text-align: center;">DATA VISUALISATION</h2>
+	<h2 class="dataTitle" style="margin: 1.8rem 2.6rem 1.8rem 2.6rem; text-align: center;">DATA VISUALIZATION</h2>
 	<div class="flex-container2">
 		<div class="flex-container" style="justify-content: center; margin: 0rem 2.6rem 1.8rem 2.6rem; align-items: center;">
 			<div id="chart_div" style="margin: 0rem 2.6rem 0rem 2.6rem;"></div>

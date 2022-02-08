@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
+<meta charset="ISO-8859-1">
+<title>Play</title>
 
 <link rel="stylesheet" href="/css/generalstyle.css"/>
 
 <script src="/js/jquery-3.6.0.min.js"></script>
 
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
 
 	var myTimeout;
 	var iteration = 0;
@@ -39,7 +41,7 @@
 		
 		$("#resume").on("click", function() {
 			const data = JSON.stringify(roundList);
-			const url = "http://localhost:8080/gamerps/showdata";
+			var url = /*[[@{/gamerps/postdata}]]*/;
 			$.ajax({
 				type: 'POST',
 				url: url,
@@ -47,10 +49,7 @@
 				contentType: 'application/json'
 			})
 			.done(function (dataBack) {
-					document.open();
-					document.write(dataBack);
-					history.pushState(null, '', "http://localhost:8080/gamerps/showdata");
-					document.close();
+					goToDataVisualisation(dataBack);
 			});
 		});
 		
@@ -139,6 +138,27 @@
 		round.winner = finalResult;
 		round.roundNumber = rounds;
 		roundList.push(round);
+	}
+	
+	function goToDataVisualisation(dataBack) {
+		var firstVitories = dataBack[0][1];
+		var secondVitories = dataBack[1][1];
+		var draws = dataBack[2][1];
+		var roundsPlayed = roundList.length;
+		var url2 = /*[[@{/gamerps/showdata}]]*/;
+		$.ajax({
+			type: 'GET',
+			url: url2,
+			data: {
+				firsts: JSON.stringify(firstVitories),
+				seconds: JSON.stringify(secondVitories),
+				draws: JSON.stringify(draws),
+				rounds: JSON.stringify(roundsPlayed)
+			}
+		})
+		.done(function () {
+				window.location.href = "http://localhost:8080/gamerps/showdata?firsts="+ firstVitories.toString() +"&seconds="+secondVitories.toString()+"&draws="+draws.toString()+"&rounds="+roundsPlayed.toString();
+		});
 	}
 
 </script>
